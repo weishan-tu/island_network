@@ -71,12 +71,8 @@ fig3a <- cowplot::plot_grid(fig3a, ncol = 1, labels = c('A'))
 # Load dataset containing diet metrics (prey number, diet breadth) for native species and bullfrogs
 diet_change_dat <- read_csv("data/fig3b-c_diet_change_data.csv")
 
-# Subset data: Isolate data for the invasive American bullfrog (Lithobates catesbeianus)
-# Used as a reference (red dashed line) in the boxplots for native species
-bullfrog_m <- diet_change_dat %>% filter(species == "Lithobates_catesbeianus")
-
-# Subset data: Isolate data for native amphibian species
-# Include only key native species (predefined list) for comparison
+# Subset data:
+# Include only key native species
 diet_change_nat <- diet_change_dat %>% filter(species %in% c(
   "Fejervarya_multistriata", 
   "Pelophylax_nigromaculatus", 
@@ -107,13 +103,6 @@ fig3b <- diet_change_nat %>%
   # Consistent color scheme: blue = control, orange = invaded
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +
   scale_color_manual(values = c("#3498DB", "#FF8000")) +
-  # Add red dashed line: Average log10(prey_no) of invasive bullfrogs (reference point)
-  geom_hline(
-    yintercept = mean(log10(bullfrog_m$prey_no)), 
-    linetype = "dashed", 
-    color = "red", 
-    size = 1
-  ) +
   # Perform Kruskal-Wallis test (non-parametric ANOVA) to compare groups; show p-value and significance stars
   stat_kruskal_test(
     label = "{p.format} {p.signif}",  # Label format: p-value + significance symbols (e.g., *, **)
@@ -136,14 +125,6 @@ fig3c <- diet_change_nat %>%
   geom_boxplot(width = 0.5, alpha = 0.8) +  # Consistent boxplot style with Figure 3b
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +  # Match color scheme
   scale_color_manual(values = c("#3498DB", "#FF8000")) +
-  # Add red dashed line: Average standardized diet breadth of invasive bullfrogs (reference)
-  # Use `na.rm = TRUE` to ignore any NA values in bullfrog data (avoids errors)
-  geom_hline(
-    yintercept = mean(bullfrog_m$scaled.breadth, na.rm = TRUE), 
-    linetype = "dashed", 
-    color = "red", 
-    size = 1
-  ) +
   # Kruskal-Wallis test with Holm correction (same as Figure 3b)
   stat_kruskal_test(
     label = "{p.format}{p.signif}", 
@@ -167,4 +148,5 @@ ggsave(
   plot = fig3, 
   width = 8.5, 
   height = 5
+
 )
