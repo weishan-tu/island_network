@@ -19,17 +19,12 @@ library(spdep)        # For spatial dependence analysis (e.g., Moran's I test)
 library(ggplot2)      # For basic data visualization (redundant with tidyverse but kept for clarity)
 library(sf)           # For modern spatial data formats and operations (simple features)
 
-# Calculate UTM Zone: Formula to determine the appropriate UTM zone based on average longitude
-# UTM Zone Selection Method: (Average longitude of study area) / 6 + 31
-(max(dat$x) + min(dat$x)) / 2 / 6 + 31
-
 # Convert the dataframe to a spatial point object (sp package format) using x (longitude) and y (latitude)
 coordinates(dat) <- ~x + y  
 # Define the coordinate reference system (CRS) as WGS84 (global geographic coordinate system)
 proj4string(dat) <- CRS("+proj=longlat +datum=WGS84")  
 
 # Convert geographic coordinates (WGS84) to UTM coordinates (meters) to ensure correct distance units
-# Select UTM Zone 51 based on the study area's location (adjust zone if needed for other regions)
 df_utm <- spTransform(dat, CRS("+proj=utm +zone=51 +datum=WGS84"))  
 
 # Build a neighbor list using K-nearest neighbors (K=5: each point is connected to its 5 closest points)
@@ -39,15 +34,15 @@ weight_matrix <- nb2listw(nb, style = "W")
 
 # Perform Moran's I test for spatial autocorrelation (response variable: Connectance)
 moran_result <- moran.test(dat$Connectance, weight_matrix, na.action = na.omit)
-print(moran_result)  # Result note: p-value = 0.06612 (marginally significant)
+print(moran_result)  # Result note: p-value = 0.066
 
 # Perform Moran's I test for spatial autocorrelation (response variable: Modularity)
 moran_result <- moran.test(dat$Modularity, weight_matrix)
-print(moran_result)  # Result note: p-value = 0.03047 (significant)
+print(moran_result)  # Result note: p-value = 0.030
 
 # Perform Moran's I test for spatial autocorrelation (response variable: Nestedness)
 moran_result <- moran.test(dat$Nestedness, weight_matrix)
-print(moran_result)  # Result note: p-value = 0.005744 (highly significant)
+print(moran_result)  # Result note: p-value = 0.006
 
 # Conclusion on spatial autocorrelation:
 # Spatial autocorrelation exists: p < 0.05 and Moran's I > 0 indicate positive autocorrelation
@@ -441,4 +436,5 @@ dt <- rbind(dd_con_avg_cof, dd_mod_avg_cof, dd_nest_avg_cof)
 
 # Export combined results to CSV file (for Figure 5: effect size plots)
 write_excel_csv(dt, "data/fig4-glmm_effect_size.csv")
+
 ```
