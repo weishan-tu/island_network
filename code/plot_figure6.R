@@ -45,16 +45,16 @@ network_all <- rbind(network_control, network_addinv)
 network_all$type <- factor(network_all$type, levels = c("Control", "Invaded"))
 
 
-# --- Figure 5A: Isolation vs. Connectance ---
+# --- Figure 6A: Isolation vs. Connectance ---
 # Scatter plot of log10(isolation) vs. Connectance (z-scores), with group-wise glm fits
-fig5a <- ggplot() +
+fig6a <- ggplot() +
   # Scatter points: All sites labeled as "Invaded" (network_addinv), colored by actual invasion status
   geom_point(
     data = network_addinv,
     aes(x = isolation, y = Connectance, color = invasion, fill = invasion),
     size = 3, shape = 21, alpha = 5/10  # Shape 21 = filled circle with border; alpha = transparency
   ) +
-  # Axis labels: Y = Connectance (z-scores); X = no label (shared label in Fig5B)
+  # Axis labels: Y = Connectance (z-scores); X = no label (shared label in fig6B)
   labs(y = "Connectance (z-scores)", x = "") +
   scale_fill_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   scale_color_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
@@ -75,10 +75,10 @@ fig5a <- ggplot() +
   )
 
 
-# --- Figure 5B: Isolation vs. Modularity ---
+# --- Figure 6B: Isolation vs. Modularity ---
 # Scatter plot of log10(isolation) vs. Modularity (z-scores), with group-wise glm fits
-# Shares x-axis label with Fig5A/5C (isolation)
-fig5b <- ggplot() +
+# Shares x-axis label with fig6A/5C (isolation)
+fig6b <- ggplot() +
   geom_point(
     data = network_addinv,
     aes(x = isolation, y = Modularity, color = invasion, fill = invasion),
@@ -91,7 +91,7 @@ fig5b <- ggplot() +
   stat_smooth(
     data = network_all,
     aes(x = isolation, y = Modularity, color = type, fill = type),
-    method = "glm", size = 1.5, linetype = 1  # Solid line (matches Fig5A)
+    method = "glm", size = 1.5, linetype = 1  # Solid line (matches fig6A)
   ) +
   stat_poly_eq(
     data = network_all,
@@ -103,15 +103,15 @@ fig5b <- ggplot() +
   )
 
 
-# --- Figure 5C: Isolation vs. Nestedness ---
+# --- Figure 6C: Isolation vs. Nestedness ---
 # Scatter plot of log10(isolation) vs. Nestedness (z-scores), with group-wise glm fits
-fig5c <- ggplot() +
+fig6c <- ggplot() +
   geom_point(
     data = network_addinv,
     aes(x = isolation, y = Nestedness, color = invasion, fill = invasion),
     size = 3, shape = 21, alpha = 5/10
   ) +
-  labs(y = "Nestedness (z-scores)", x = "")  # X = no label (shared with Fig5B)
+  labs(y = "Nestedness (z-scores)", x = "")  # X = no label (shared with fig6B)
   scale_fill_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   scale_color_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   stat_smooth(
@@ -129,16 +129,16 @@ fig5c <- ggplot() +
   )
 
 
-# --- Figure 5D: Area vs. Connectance ---
+# --- Figure 6D: Area vs. Connectance ---
 # Scatter plot of log10(area) vs. Connectance (z-scores), with group-wise glm fits
 # Uses dashed lines (linetype = 2) to distinguish from isolation-related plots
-fig5d <- ggplot() +
+fig6d <- ggplot() +
   geom_point(
     data = network_addinv,
     aes(x = area, y = Connectance, color = invasion, fill = invasion),
     size = 3, shape = 21, alpha = 5/10
   ) +
-  labs(y = "Connectance (z-scores)", x = "")  # X = no label (shared with Fig5E)
+  labs(y = "Connectance (z-scores)", x = "")  # X = no label (shared with fig6E)
   scale_fill_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   scale_color_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   stat_smooth(
@@ -156,10 +156,10 @@ fig5d <- ggplot() +
   )
 
 
-# --- Figure 5E: Area vs. Modularity ---
+# --- Figure 6E: Area vs. Modularity ---
 # Scatter plot of log10(area) vs. Modularity (z-scores), with group-wise glm fits
-# Shares x-axis label with Fig5D/5F (area)
-fig5e <- ggplot() +
+# Shares x-axis label with fig6D/5F (area)
+fig6e <- ggplot() +
   geom_point(
     data = network_addinv,
     aes(x = area, y = Modularity, color = invasion, fill = invasion),
@@ -184,15 +184,15 @@ fig5e <- ggplot() +
   )
 
 
-# --- Figure 5F: Area vs. Nestedness ---
+# --- Figure 6F: Area vs. Nestedness ---
 # Scatter plot of log10(area) vs. Nestedness (z-scores), with group-wise glm fits
-fig5f <- ggplot() +
+fig6f <- ggplot() +
   geom_point(
     data = network_addinv,
     aes(x = area, y = Nestedness, color = invasion, fill = invasion),
     size = 3, shape = 21, alpha = 5/10
   ) +
-  labs(y = "Nestedness (z-scores)", x = "")  # X = no label (shared with Fig5E)
+  labs(y = "Nestedness (z-scores)", x = "")  # X = no label (shared with fig6E)
   scale_fill_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   scale_color_manual(values = c("#1D91C0", "#FF8000", "#1D91C0", "#FF8000")) +
   stat_smooth(
@@ -210,10 +210,10 @@ fig5f <- ggplot() +
   )
 
 
-# --- Assemble Final Figure 5 ---
+# --- Assemble Final Figure 6 ---
 # Combine all 6 subfigures (5A-5F) into a 3-column grid with subfigure labels (A-F)
-fig5 <- cowplot::plot_grid(
-  fig5a, fig5b, fig5c, fig5d, fig5e, fig5f,
+fig6 <- cowplot::plot_grid(
+  fig6a, fig6b, fig6c, fig6d, fig6e, fig6f,
   ncol = 3,  # Arrange plots in 3 columns (rows = 2)
   labels = c('A', 'B', 'C', 'D', 'E', 'F')  # Label each subfigure (top-left corner)
   # Original comment: Extra labels ("G", "H", "I") are commented out (not needed here)
@@ -224,8 +224,8 @@ fig5 <- cowplot::plot_grid(
 # Save as PNG with high resolution (suitable for publications)
 # Width = 9 inches (accommodates 3 columns), Height = 6 inches (fits 2 rows)
 ggsave(
-  filename = paste0('figure/fig5_network_biogeography.png'),  # Output path/name
-  plot = fig5,                                               # Plot to save
+  filename = paste0('figure/figure6_network_biogeography.png'),  # Output path/name
+  plot = fig6,                                               # Plot to save
   width = 9,                                                # Width in inches
   height = 6                                                # Height in inches
 )
