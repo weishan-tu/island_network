@@ -7,7 +7,7 @@ library(cowplot)      # For combining multiple ggplot2 plots into a single cohes
 # --- Load Data for Centrality Analysis ---
 # Load dataset containing species-level centrality metrics (degree and closeness) 
 # and invasion status for each site/pond
-centrality_dat <- read_csv("data/fig3_centrality_data.csv")
+centrality_dat <- read_csv("data/fig4_centrality_data.csv")
 
 # --- Set Global ggplot2 Theme for Consistent Formatting ---
 # Standardize plot style across all figures: remove grid lines, set legend/font properties, adjust margins
@@ -42,10 +42,10 @@ shape_list <- c(
   "Lithobates_catesbeianus" = 17     # Solid triangle (American bullfrog, invasive species)
 )
 
-# --- Plot Figure 3a: Scatter Plot of Centrality Metrics ---
+# --- Plot figure 4a: Scatter Plot of Centrality Metrics ---
 # Scatter plot comparing two centrality metrics (Degree vs. Closeness) across species,
 # colored by invasion status (control vs. invaded) and shaped by species identity
-fig3a <- ggplot(centrality_dat, aes(
+fig4a <- ggplot(centrality_dat, aes(
   x = degree,                          # X-axis: Degree Centrality (z-scores, standardized)
   y = closeness,                       # Y-axis: Closeness Centrality (z-scores, standardized)
   shape = species,                     # Differentiate species by point shape
@@ -63,16 +63,20 @@ fig3a <- ggplot(centrality_dat, aes(
   theme_bw() +                         # Apply black-and-white theme (complements earlier global theme)
   theme(legend.position = "bottom")    # Move legend to bottom to avoid overlapping with data points
 
-# Add subplot label "A" to Figure 3a using cowplot (consistent with publication labeling)
-fig3a <- cowplot::plot_grid(fig3a, ncol = 1, labels = c('A'))  
+# Add subplot label "A" to figure 4a using cowplot (consistent with publication labeling)
+fig4a <- cowplot::plot_grid(fig4a, ncol = 1, labels = c('A'))  
 
 
-# --- Plot Figure 3b & 3c: Diet Change Analysis (Boxplots) ---
+# --- Plot figure 4b & 3c: Diet Change Analysis (Boxplots) ---
 # Load dataset containing diet metrics (prey number, diet breadth) for native species and bullfrogs
-diet_change_dat <- read_csv("data/fig3b-c_diet_change_data.csv")
+diet_change_dat <- read_csv("data/fig4b-c_diet_change_data.csv")
 
-# Subset data:
-# Include only key native species
+# Subset data: Isolate data for the invasive American bullfrog (Lithobates catesbeianus)
+# Used as a reference (red dashed line) in the boxplots for native species
+bullfrog_m <- diet_change_dat %>% filter(species == "Lithobates_catesbeianus")
+
+# Subset data: Isolate data for native amphibian species
+# Include only key native species (predefined list) for comparison
 diet_change_nat <- diet_change_dat %>% filter(species %in% c(
   "Fejervarya_multistriata", 
   "Pelophylax_nigromaculatus", 
@@ -81,7 +85,7 @@ diet_change_nat <- diet_change_dat %>% filter(species %in% c(
 ))
 
 # Reorder factor levels for native species to control their display order on the x-axis
-# Ensures consistent and logical species ordering in Figure 3b and 3c
+# Ensures consistent and logical species ordering in figure 4b and 3c
 diet_change_nat$species <- factor(diet_change_nat$species, levels = c(
   "Fejervarya_multistriata", 
   "Pelophylax_nigromaculatus", 
@@ -90,10 +94,10 @@ diet_change_nat$species <- factor(diet_change_nat$species, levels = c(
 ))
 
 
-# --- Figure 3b: Boxplot of Native Species' Prey Number (log10-transformed) ---
+# --- figure 4b: Boxplot of Native Species' Prey Number (log10-transformed) ---
 # Compare log10(prey_no) (species degree, i.e., number of prey) of native species 
 # between control and invaded ponds; add bullfrog average as reference
-fig3b <- diet_change_nat %>%
+fig4b <- diet_change_nat %>%
   ggplot(aes(
     x = species,                       # X-axis: Native amphibian species
     y = log10(prey_no),                # Y-axis: log10-transformed number of prey (reduces skewness)
@@ -103,6 +107,13 @@ fig3b <- diet_change_nat %>%
   # Consistent color scheme: blue = control, orange = invaded
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +
   scale_color_manual(values = c("#3498DB", "#FF8000")) +
+  # Add red dashed line: Average log10(prey_no) of invasive bullfrogs (reference point)
+  geom_hline(
+    yintercept = mean(log10(bullfrog_m$prey_no)), 
+    linetype = "dashed", 
+    color = "red", 
+    size = 1
+  ) +
   # Perform Kruskal-Wallis test (non-parametric ANOVA) to compare groups; show p-value and significance stars
   stat_kruskal_test(
     label = "{p.format} {p.signif}",  # Label format: p-value + significance symbols (e.g., *, **)
@@ -113,19 +124,27 @@ fig3b <- diet_change_nat %>%
   ylab("Species Degree")              # Y-axis title (matches title for clarity)
 
 
-# --- Figure 3c: Boxplot of Native Species' Standardized Diet Breadth ---
+# --- figure 4c: Boxplot of Native Species' Standardized Diet Breadth ---
 # Compare standardized diet breadth of native species between control and invaded ponds;
 # add bullfrog average as reference
-fig3c <- diet_change_nat %>%
+fig4c <- diet_change_nat %>%
   ggplot(aes(
     x = species,                       # X-axis: Native amphibian species
     y = scaled.breadth,                # Y-axis: Standardized diet breadth (normalized for comparison)
     fill = invasion                     # Fill boxplots by invasion status
   )) +
-  geom_boxplot(width = 0.5, alpha = 0.8) +  # Consistent boxplot style with Figure 3b
+  geom_boxplot(width = 0.5, alpha = 0.8) +  # Consistent boxplot style with figure 4b
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +  # Match color scheme
   scale_color_manual(values = c("#3498DB", "#FF8000")) +
-  # Kruskal-Wallis test with Holm correction (same as Figure 3b)
+  # Add red dashed line: Average standardized diet breadth of invasive bullfrogs (reference)
+  # Use `na.rm = TRUE` to ignore any NA values in bullfrog data (avoids errors)
+  geom_hline(
+    yintercept = mean(bullfrog_m$scaled.breadth, na.rm = TRUE), 
+    linetype = "dashed", 
+    color = "red", 
+    size = 1
+  ) +
+  # Kruskal-Wallis test with Holm correction (same as figure 4b)
   stat_kruskal_test(
     label = "{p.format}{p.signif}", 
     p.adjust.method = "holm"
@@ -134,19 +153,18 @@ fig3c <- diet_change_nat %>%
   xlab("") +                          # Remove x-axis title
   ylab("Diet breadth")                # Y-axis title
 
-# --- Assemble Figure 3: Combine 3a, 3b, and 3c ---
-# First, stack Figure 3b and 3c vertically (1 column) with labels "B" and "C"
-fig3bc <- cowplot::plot_grid(fig3b, fig3c, ncol = 1, labels = c('B', 'C'))  
+# --- Assemble figure 4: Combine 3a, 3b, and 3c ---
+# First, stack figure 4b and 3c vertically (1 column) with labels "B" and "C"
+fig4bc <- cowplot::plot_grid(fig4b, fig4c, ncol = 1, labels = c('B', 'C'))  
 
-# Then, arrange Figure 3a (left) and fig3bc (right) horizontally (2 columns)
-fig3 <- cowplot::plot_grid(fig3a, fig3bc, ncol = 2)  
+# Then, arrange figure 4a (left) and fig4bc (right) horizontally (2 columns)
+fig4 <- cowplot::plot_grid(fig4a, fig4bc, ncol = 2)  
 
-# Save the final combined Figure 3 to a file (publication-ready resolution)
+# Save the final combined figure 4 to a file (publication-ready resolution)
 # Width = 8.5 inches, Height = 5 inches (balances readability and space)
 ggsave(
-  filename = paste0('figure/figure3.png'), 
-  plot = fig3, 
+  filename = paste0('figure/figure4.png'), 
+  plot = fig4, 
   width = 8.5, 
   height = 5
-
 )
