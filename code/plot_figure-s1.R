@@ -250,7 +250,7 @@ figs1 <- cowplot::plot_grid(
 # Save the combined figure as a high-resolution PNG (suitable for publications)
 # Width = 9 inches, Height = 9 inches (balances readability for 3x3 grid)
 ggsave(
-  filename = paste0('figure/figs1_community_biogeography.png'),
+  filename = paste0('figure/figure_s1_community_biogeography.png'),
   plot = figs1,
   width = 9,
   height = 9
