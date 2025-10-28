@@ -5,7 +5,7 @@ library(cowplot)      # For combining multiple ggplot2 plots into a single figur
 library(bipartite)    # For bipartite network analysis and visualization
 library(ggpubr)       # For creating publication-ready ggplot2 plots and adding statistical tests
 
-# The goal of this script is to plot Figure 2, which compares the predator-prey network structure
+# The goal of this script is to plot Figure 3, which compares the predator-prey network structure
 # and diet composition between invaded and control ponds.
 
 # Load the network metrics data for all sites/ponds
@@ -26,7 +26,7 @@ theme_set(theme_test() +
                   strip.text.y = element_text(size = 10, color = "black"),
                   plot.margin = unit(rep(0.1, 4), 'cm'))) # Reduce plot margins
 
-# --- Plot Figure 2a: 3D Scatter Plot of Network Metrics ---
+# --- Plot Figure 3a: 3D Scatter Plot of Network Metrics ---
 
 # Prepare data for the 3D plot, filtering out rows where Connectance is NA
 plot3d_netw <- network_dat %>% filter(!is.na(Connectance))
@@ -37,7 +37,7 @@ plot3d_netw$invasion <- as.factor(plot3d_netw$invasion)
 # Open a CairoPNG device to save the 3D plot with high resolution
 # This is used instead of png() for better anti-aliasing and font rendering.
 Cairo::CairoPNG(
-  filename = paste0("figure/figure2a_network_3d.png "), # Output file path
+  filename = paste0("figure/figure3a_network_3d.png "), # Output file path
   width = 10, height = 10, units = "in",              # Size in inches
   dpi = 600)                                          # High resolution for publication
 
@@ -62,7 +62,7 @@ scatter3D(
 dev.off()
 
 
-# --- Plot Figure 2a Insets: Example Network Webs ---
+# --- Plot Figure 3a Insets: Example Network Webs ---
 
 # --- Example Site 1 (control pond) ---
 
@@ -99,7 +99,7 @@ int.colors <- c("#1D91C0")
 
 # Open a CairoPNG device to save the first example network web
 Cairo::CairoPNG(
-  filename = paste0("figure/figure2a_ex1.png "),
+  filename = paste0("figure/figure3a_ex1.png "),
   width = 8, height = 5, units = "in", dpi = 600)
 
 # Plot the bipartite network web using bipartite::plotweb
@@ -147,7 +147,7 @@ int.colors <- c("#FF8000")
 
 # Open a CairoPNG device to save the second example network web
 Cairo::CairoPNG(
-  filename = paste0("figure/figure2a_ex2.png "),
+  filename = paste0("figure/figure3a_ex2.png "),
   width = 8, height = 5, units = "in", dpi = 600)
 
 # Plot the bipartite network web
@@ -161,10 +161,10 @@ plotweb(ex_site2_matrix,
 dev.off()
 
 
-# --- Plot Figure 2b-d: Boxplots of Network Metrics ---
+# --- Plot Figure 3b-d: Boxplots of Network Metrics ---
 
 # Create a boxplot for Connectance, grouped by invasion status
-fig2b <- network_dat %>%
+fig3b <- network_dat %>%
   ggplot(aes(x = invasion, y = Connectance, fill = invasion)) +
   geom_boxplot(width = 0.5, alpha = 0.6) +
   scale_fill_manual(values = c("#3498DB", "#FF8000")) + # Colors for control (blue) and invaded (orange)
@@ -174,7 +174,7 @@ fig2b <- network_dat %>%
   stat_kruskal_test(label = "{p.format}{p.signif}", p.adjust.method = "holm")
 
 # Create a boxplot for Modularity, grouped by invasion status
-fig2c <- network_dat %>%
+fig3c <- network_dat %>%
   ggplot(aes(x = invasion, y = Modularity, fill = invasion)) +
   geom_boxplot(width = 0.5, alpha = 0.6) +
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +
@@ -183,7 +183,7 @@ fig2c <- network_dat %>%
   stat_kruskal_test(label = "{p.format}{p.signif}", p.adjust.method = "holm")
 
 # Create a boxplot for Nestedness, grouped by invasion status
-fig2d <- network_dat %>%
+fig3d <- network_dat %>%
   ggplot(aes(x = invasion, y = Nestedness, fill = invasion)) +
   geom_boxplot(width = 0.5, alpha = 0.6) +
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +
@@ -192,12 +192,12 @@ fig2d <- network_dat %>%
   stat_kruskal_test(label = "{p.format}{p.signif}", p.adjust.method = "holm")
 
 # Combine the three boxplots into a single figure using cowplot::plot_grid
-fig2df <- plot_grid(fig2b, fig2c, fig2d,
+fig3df <- plot_grid(fig3b, fig3c, fig3d,
                     ncol = 3,             # Arrange plots in 3 columns
                     labels = c('B', 'C', 'D')) # Add labels to each subplot
 
 # Save the combined figure to a file
-ggsave(filename = paste0('figure/figure2b-d_network_change.png'),
-       plot = fig2df,
+ggsave(filename = paste0('figure/figure3b-d_network_change.png'),
+       plot = fig3df,
        width = 9, height = 3)
 ```
