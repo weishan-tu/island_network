@@ -2,7 +2,7 @@
 library(tidyverse)  # For data manipulation (read_csv) and visualization (ggplot2)
 library(iNEXT)      # For performing iNEXT (iNterpolation and EXTrapolation) analysis to create rarefaction/extrapolation curves
 
-# --- Figure 5: Rarefaction Curves of Prey Data ---
+# --- Figure S3: Rarefaction Curves of Prey Data ---
 
 # 1. Load and Prepare Data
 # Read the CSV file containing sequencing read counts for each sample and OTU
@@ -25,7 +25,7 @@ p11 <- p1 +
 # 4. Save the Plot
 # Save the final customized plot to a file
 ggsave(
-  paste0("figure/figs5_Rarefaction_curves_of_the_prey_data.png"),
+  paste0("figure/figure_s3_Rarefaction_curves_of_the_prey_data.png"),
   plot = p11,
   width = 6,   # Set the width of the output image in inches
   height = 5   # Set the height of the output image in inches
