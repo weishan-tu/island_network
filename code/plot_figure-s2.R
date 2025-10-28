@@ -4,7 +4,7 @@ library(ggpubr)       # For enhancing publication-quality plots
 library(ggpmisc)      # For adding regression equations and statistics to plots
 library(cowplot)      # For combining multiple ggplot2 plots into a single figure
 
-# --- Figure 3a: Diet Breadth vs. Isolation (Non-invaded sites only) ---
+# --- Figure S3a: Diet Breadth vs. Isolation (Non-invaded sites only) ---
 
 # Load diet change data and combine it with network data
 # Filter to include only non-invaded sites (invasion == "N")
@@ -29,7 +29,7 @@ theme_set(theme_test() +
             ))
 
 # Create a scatter plot with a linear regression line for non-invaded sites
-figs3a <- ggplot(data = diet_change_dat, aes(x = isolation, y = scaled.breadth)) +
+figs2a <- ggplot(data = diet_change_dat, aes(x = isolation, y = scaled.breadth)) +
   # Scatter points: all black, semi-transparent
   geom_point(size = 3, shape = 21, alpha = 5/10, fill = "black", colour = "black") +
   # Axis labels
@@ -43,7 +43,7 @@ figs3a <- ggplot(data = diet_change_dat, aes(x = isolation, y = scaled.breadth))
   )
 
 
-# --- Figure 3b: Residence Time vs. Isolation (Invaded sites only) ---
+# --- Figure S3b: Residence Time vs. Isolation (Invaded sites only) ---
 
 # Load network data and filter to include only invaded sites (invasion == "Y")
 plot_dat <- read_csv("network_data.csv") %>%
@@ -53,7 +53,7 @@ plot_dat <- read_csv("network_data.csv") %>%
 plot_dat$isolation <- log10(plot_dat$isolation)
 
 # Create a scatter plot with a linear regression line for invaded sites
-figs3b <- ggplot(data = plot_dat, aes(x = isolation, y = residence_time)) +
+figs2b <- ggplot(data = plot_dat, aes(x = isolation, y = residence_time)) +
   # Scatter points: all black, semi-transparent
   geom_point(size = 3, shape = 21, alpha = 5/10, fill = "black", colour = "black") +
   # Axis labels
@@ -69,17 +69,17 @@ figs3b <- ggplot(data = plot_dat, aes(x = isolation, y = residence_time)) +
 
 # --- Assemble and Save the Combined Figure ---
 
-# Combine figs3a and figs3b into a single figure with 2 columns
+# Combine figs2a and figs2b into a single figure with 2 columns
 # Use "AUTO" to automatically generate labels "A" and "B"
-figs3 <- plot_grid(figs3a, figs3b, ncol = 2, labels = "AUTO")
+figs2 <- plot_grid(figs2a, figs2b, ncol = 2, labels = "AUTO")
 
 # Display the combined figure
-figs3
+figs2
 
 # Save the combined figure to a file
 ggsave(
-  filename = paste0('figure/figures3.png'),
-  plot = figs3,
+  filename = paste0('figure/figure_s2.png'),
+  plot = figs2,
   width = 6,  # Width in inches
   height = 3  # Height in inches
 )
