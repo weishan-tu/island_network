@@ -25,7 +25,7 @@ plot_dat$species <- factor(plot_dat$species, levels = c("Fejervarya multistriata
                                                         "Pelophylax plancyi", "Hyla chinensis", 
                                                         "Rana zhenhaiensis", "Polypedates megacephalus",
                                                         "Quasipaa spinosa", "Hylarana latouchii",  
-                                                        "Lithobates catesbeianus"))  # Invasive American bullfrog (last for emphasis)
+                                                        "Aquarana catesbeianus"))  # Invasive American bullfrog (last for emphasis)
 
 
 # --- Figure 2a: Stacked Bar Plot of Prey Composition (RRA) by Species ---
@@ -54,7 +54,7 @@ nmds_result$species <- factor(nmds_result$species, levels = c("Fejervarya_multis
                                                               "Pelophylax_nigromaculatus", "Microhyla_fissipes", 
                                                               "Bufo_gargarizans", "Rana_zhenhaiensis", "Pelophylax_plancyi",
                                                               "Hylarana_latouchii", "Polypedates_megacephalus", 
-                                                              "Hyla_chinensis", "Lithobates_catesbeianus"))  # Invasive bullfrog last
+                                                              "Hyla_chinensis", "Aquarana_catesbeianus"))  # Invasive bullfrog last
 
 # Define species-specific point shapes (ensures each species has a unique symbol)
 shape_list <- c(
@@ -67,7 +67,7 @@ shape_list <- c(
   "Hylarana_latouchii" = 5,          # Diamond
   "Hyla_chinensis" = 6,              # Triangle (point up)
   "Polypedates_megacephalus" = 7,    # Square with cross
-  "Lithobates_catesbeianus" = 17     # Solid triangle (point up, for invasive bullfrog)
+  "Aquarana_catesbeianus" = 17     # Solid triangle (point up, for invasive bullfrog)
 )
 
 # Define species-specific colors (ensures each species has a unique color; invasive bullfrog = red)
@@ -81,7 +81,7 @@ color_list <- list(
   "Hylarana_latouchii" = "#EDF8BC",          # Pale yellow
   "Hyla_chinensis" = "#F1FABF",              # Light yellow
   "Polypedates_megacephalus" = "#FCFED4",    # Near white
-  "Lithobates_catesbeianus" = "#DC0000"      # Bright red (highlights invasive species)
+  "Aquarana_catesbeianus" = "#DC0000"      # Bright red (highlights invasive species)
 )
 
 # NMDS stress value: Measures how well the 2D ordination represents the original dissimilarity matrix
@@ -143,8 +143,34 @@ figs2 <- cowplot::plot_grid(
   labels = c('A', 'B')       # Label subfigures (top-left corner of each plot)
 )
 
+# --- Figure 2c: Vertebrate prey composition in the diet of the invasive bullfrog ---
+bullfrog_vert_diet <- read_csv("data/fig2_bullfrog_vert_diet.csv")
+bvdt <- bullfrog_vert_diet %>%
+  arrange(desc(RRA)) %>%
+  mutate(
+    percent = round(RRA * 100, 1),
+    label = ifelse(percent >= 5, paste0(percent, "%"), ""),
+    ypos = cumsum(RRA) - 0.5 * RRA
+  )
+bvdt$Prey <- factor(bvdt$Prey,levels =c(bvdt$Prey))
+fig2c <- ggplot(bvdt, aes(x = "", y = RRA, fill = Prey)) +
+  geom_bar(stat = "identity", width = 0.3, color = "white") +
+  coord_polar("y", start = 0) +
+  geom_text(aes(y = ypos, label = label), 
+            color = "black", size = 3) +
+  scale_fill_brewer(palette = "Set3") +
+  # theme_void() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    legend.position = "right"
+  )
+fig2c
+fig2bc <- cowplot::plot_grid(
+  fig2b,fig2c,
+  ncol = 2, labels = c('B', 'C'))  
+fig2 <- cowplot::plot_grid(
+  fig2a,fig2bc,
+  ncol = 1, labels = c('A')) 
+fig2
+ggsave(paste0("figure/figure2.pdf"), fig2, width = 6.5, height = 6.5)
 
-
-# Save the combined figure as a high-resolution PNG file (suitable for supplements)
-# Width = 6 inches, Height = 10 inches (accommodates vertical stack of two plots)
-ggsave(paste0("figure/figure_s1.png"), figs2, width = 6, height = 10)
