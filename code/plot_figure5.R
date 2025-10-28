@@ -202,7 +202,7 @@ fig5
 # Save as PNG with high resolution (suitable for publications)
 # Width = 12 inches (accommodates 3 columns), Height = 4 inches (fits variable list on y-axis)
 ggsave(
-  filename = paste0('figure/figure4_network_effect_size_95_sw.png'),  # Output path/name
+  filename = paste0('figure/figure5_network_effect_size_95_sw.png'),  # Output path/name
   plot = fig5,                                                       # Plot to save
   width = 12,                                                        # Width in inches
   height = 4                                                         # Height in inches
