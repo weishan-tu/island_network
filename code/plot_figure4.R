@@ -96,7 +96,7 @@ diet_change_nat$species <- factor(diet_change_nat$species, levels = c(
 
 # --- figure 4b: Boxplot of Native Species' Prey Number (log10-transformed) ---
 # Compare log10(prey_no) (species degree, i.e., number of prey) of native species 
-# between control and invaded ponds; add bullfrog average as reference
+# between control and invaded ponds
 fig4b <- diet_change_nat %>%
   ggplot(aes(
     x = species,                       # X-axis: Native amphibian species
@@ -107,21 +107,13 @@ fig4b <- diet_change_nat %>%
   # Consistent color scheme: blue = control, orange = invaded
   scale_fill_manual(values = c("#3498DB", "#FF8000")) +
   scale_color_manual(values = c("#3498DB", "#FF8000")) +
-  # Add red dashed line: Average log10(prey_no) of invasive bullfrogs (reference point)
-  geom_hline(
-    yintercept = mean(log10(bullfrog_m$prey_no)), 
-    linetype = "dashed", 
-    color = "red", 
-    size = 1
-  ) +
   # Perform Kruskal-Wallis test (non-parametric ANOVA) to compare groups; show p-value and significance stars
   stat_kruskal_test(
     label = "{p.format} {p.signif}",  # Label format: p-value + significance symbols (e.g., *, **)
     p.adjust.method = "holm"          # Holm-Bonferroni correction for multiple comparisons
   ) +
-  labs(title = "Species Degree")      # Plot title (species degree = number of unique prey) +
   xlab("") +                          # Remove x-axis title (species names are self-explanatory)
-  ylab("Species Degree")              # Y-axis title (matches title for clarity)
+  ylab("The number of prey")              # Y-axis title (matches title for clarity)
 
 
 # --- figure 4c: Boxplot of Native Species' Standardized Diet Breadth ---
@@ -149,7 +141,6 @@ fig4c <- diet_change_nat %>%
     label = "{p.format}{p.signif}", 
     p.adjust.method = "holm"
   ) +
-  labs(title = "Diet breadth") +       # Plot title
   xlab("") +                          # Remove x-axis title
   ylab("Diet breadth")                # Y-axis title
 
@@ -168,5 +159,6 @@ ggsave(
   width = 8.5, 
   height = 5
 )
+
 
 
