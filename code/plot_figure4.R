@@ -38,7 +38,7 @@ shape_list <- c(
   "Rana_zhenhaiensis" = 4,           # X sign (Zhenhai brown frog)
   "Hylarana_latouchii" = 5,          # Diamond (Brown wood frog)
   "Hyla_chinensis" = 6,              # Triangle (Chinese tree frog)
-  "Polypedates_megacephalus" = 7,    # Square with cross (Spot legged treefrog)
+  "Polypedates_braueri" = 7,    # Square with cross (Brauer's whipping frog)
   "Lithobates_catesbeianus" = 17     # Solid triangle (American bullfrog, invasive species)
 )
 
@@ -168,3 +168,4 @@ ggsave(
   width = 8.5, 
   height = 5
 )
+
