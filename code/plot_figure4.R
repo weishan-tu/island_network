@@ -39,7 +39,7 @@ shape_list <- c(
   "Hylarana_latouchii" = 5,          # Diamond (Brown wood frog)
   "Hyla_chinensis" = 6,              # Triangle (Chinese tree frog)
   "Polypedates_braueri" = 7,    # Square with cross (Brauer's whipping frog)
-  "Lithobates_catesbeianus" = 17     # Solid triangle (American bullfrog, invasive species)
+  "Aquarana_catesbeianus" = 17     # Solid triangle (American bullfrog, invasive species)
 )
 
 # --- Plot figure 4a: Scatter Plot of Centrality Metrics ---
@@ -168,4 +168,5 @@ ggsave(
   width = 8.5, 
   height = 5
 )
+
 
