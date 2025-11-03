@@ -23,7 +23,7 @@ plot_dat$prey <- factor(plot_dat$prey, levels = c("Isopoda", "Hymenoptera", "Dip
 plot_dat$species <- factor(plot_dat$species, levels = c("Fejervarya multistriata", "Microhyla fissipes",
                                                         "Pelophylax nigromaculatus", "Bufo gargarizans",
                                                         "Pelophylax plancyi", "Hyla chinensis", 
-                                                        "Rana zhenhaiensis", "Polypedates megacephalus",
+                                                        "Rana zhenhaiensis", "Polypedates braueri",
                                                         "Quasipaa spinosa", "Hylarana latouchii",  
                                                         "Aquarana catesbeianus"))  # Invasive American bullfrog (last for emphasis)
 
@@ -53,7 +53,7 @@ nmds_result <- read_csv("data/figs2_nmds_result.csv")
 nmds_result$species <- factor(nmds_result$species, levels = c("Fejervarya_multistriata", 
                                                               "Pelophylax_nigromaculatus", "Microhyla_fissipes", 
                                                               "Bufo_gargarizans", "Rana_zhenhaiensis", "Pelophylax_plancyi",
-                                                              "Hylarana_latouchii", "Polypedates_megacephalus", 
+                                                              "Hylarana_latouchii", "Polypedates_braueri", 
                                                               "Hyla_chinensis", "Aquarana_catesbeianus"))  # Invasive bullfrog last
 
 # Define species-specific point shapes (ensures each species has a unique symbol)
@@ -173,4 +173,5 @@ fig2 <- cowplot::plot_grid(
   ncol = 1, labels = c('A')) 
 fig2
 ggsave(paste0("figure/figure2.pdf"), fig2, width = 6.5, height = 6.5)
+
 
