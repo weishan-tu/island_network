@@ -71,10 +71,6 @@ fig4a <- cowplot::plot_grid(fig4a, ncol = 1, labels = c('A'))
 # Load dataset containing diet metrics (prey number, diet breadth) for native species and bullfrogs
 diet_change_dat <- read_csv("data/fig4b-c_diet_change_data.csv")
 
-# Subset data: Isolate data for the invasive American bullfrog (Lithobates catesbeianus)
-# Used as a reference (red dashed line) in the boxplots for native species
-bullfrog_m <- diet_change_dat %>% filter(species == "Lithobates_catesbeianus")
-
 # Subset data: Isolate data for native amphibian species
 # Include only key native species (predefined list) for comparison
 diet_change_nat <- diet_change_dat %>% filter(species %in% c(
@@ -159,6 +155,7 @@ ggsave(
   width = 8.5, 
   height = 5
 )
+
 
 
 
